@@ -14,7 +14,7 @@ setup(
     packages=['Elise'],
     license='GPL',
     description='Simple multithreading spider',
-    long_description=open('README').read(),
+    long_description=open('README.md').read(),
     install_requires=[
         "requests==2.19.1",
     ],
