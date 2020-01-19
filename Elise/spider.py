@@ -94,6 +94,81 @@ class Spider(object):
         pass
 
 
+class SessionSpider(object):
+    def __init__(self):
+        self.host = ""
+        self.url = ""
+        self.proxies = None
+        self.headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36",
+        }
+        self.session = requests.Session()
+
+    def request_get(self, url, parse_func, headers, **request_params):
+        result = {}
+        params = request_params.get('params')
+        timeout = request_params.get('timeout', 5)
+        charset = request_params.get('charset', 'utf-8')
+        try:
+            r = self.session.get(url, params=params, headers=headers, proxies=self.proxies, timeout=timeout)
+        except Exception as e:
+            result['code'] = 1
+            result['msg'] = str(e)
+            return result
+
+        try:
+            content = r.content.decode(charset)
+            data = parse_func(content)
+        except Exception as e:
+            result['code'] = 2
+            result['msg'] = str(e)
+            return result
+
+        result['code'] = 0
+        result['data'] = data
+        return result
+
+    def request_post(self, url, parse_func, headers, **request_params):
+        result = {}
+        # , params, data=None, json=None , timeout=5
+        params = request_params.get('params')
+        data = request_params.get('data')
+        jsn = request_params.get('json')
+        timeout = request_params.get('timeout', 5)
+        charset = request_params.get('charset', 'utf-8')
+        try:
+            r = self.session.post(url, headers=headers, params=params, data=data, json=jsn, proxies=self.proxies,
+                              timeout=timeout)
+        except Exception as e:
+            result['code'] = 1
+            result['msg'] = str(e)
+            return result
+
+        # print(r.text)
+        try:
+            content = r.content.decode(charset)
+            data = parse_func(content)
+        except Exception as e:
+            result['code'] = 2
+            result['msg'] = str(e)
+            return result
+
+        result['code'] = 0
+        result['data'] = data
+        return result
+
+    def get_data(self, method='get', **kwargs):
+        if method == 'get':
+            return self.request_get(self.url, self.parse, self.headers, **kwargs)
+        elif method == 'post':
+            return self.request_post(self.url, self.parse, self.headers, **kwargs)
+        else:
+            print('method not support')
+
+    def parse(self):
+        pass
+
+
 if __name__ == "__main__":
     spider = Spider()
-    spider.origin = "https://www.marathon.tokyo/2018/result/index.php"
+    spider.origin = ""

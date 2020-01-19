@@ -6,7 +6,7 @@ from distutils.core import setup
 
 setup(
     name='Elise',
-    version='0.1.6',
+    version='0.2.0',
     author='Masako',
     author_email='Masako@example.com',
     url='https://github.com/TitledPythonFile',
@@ -14,8 +14,8 @@ setup(
     packages=['Elise'],
     license='GPL',
     description='Simple multithreading spider',
-    long_description=open('README.md').read(),
-    install_requires=[
-        "requests==2.19.1",
-    ],
+    long_description=open('README').read(),
+    # install_requires=[
+    #     "requests==2.19.1",
+    # ],
 )
